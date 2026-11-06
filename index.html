@@ -141,6 +141,11 @@ footer { margin-top: 32px; color: var(--muted); font-size: 12px; text-align: cen
   .stat .value { font-size: 28px; }
   .band-labels { font-size: 10.5px; }
 }
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; }
+.controls .theme-toggle { margin-top: 0; }
+.lang-switch { display: inline-flex; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 3px; }
+.lang-switch button { font: inherit; font-size: 13px; font-weight: 600; border: 0; background: transparent; color: var(--text-2); padding: 4px 12px; border-radius: 999px; cursor: pointer; }
+.lang-switch button[aria-pressed="true"] { background: var(--text); color: var(--surface); }
 </style>
 </head>
 <body>
@@ -148,36 +153,42 @@ footer { margin-top: 32px; color: var(--muted); font-size: 12px; text-align: cen
 
   <header class="hero">
     <div>
-      <div class="eyebrow">ADxS.org Symptomtest V5 · 06 Nov 2026</div>
-      <h1>Signs of <span>28 of 43</span> ADHD symptoms</h1>
-      <p class="lede">An interactive look at a self-screening result: how many symptoms showed up, how the answers compare with people who have and don't have ADHD, and how they map onto DSM‑5, ICD‑10 and ASRS criteria.</p>
-      <button class="theme-toggle" id="themeBtn" type="button">Toggle dark / light</button>
+      <div class="eyebrow" data-i18n="eyebrow"></div>
+      <h1 data-i18n="h1"></h1>
+      <p class="lede" data-i18n="lede"></p>
+      <div class="controls">
+        <div class="lang-switch" role="group" aria-label="Language / Lingua">
+          <button type="button" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang="it" aria-pressed="false">IT</button>
+        </div>
+        <button class="theme-toggle" id="themeBtn" type="button" data-i18n="theme"></button>
+      </div>
     </div>
     <div class="card ring-card">
-      <div class="ring" role="img" aria-label="28 of 43 symptoms found (65.1%)">
+      <div class="ring" role="img" data-i18n-aria="ringAria">
         <svg viewBox="0 0 100 100">
           <circle cx="50" cy="50" r="42" fill="none" stroke="var(--surface-2)" stroke-width="10"/>
           <circle id="ringArc" cx="50" cy="50" r="42" fill="none" stroke="var(--found)" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 264"/>
         </svg>
-        <div class="center"><div class="big" id="ringNum">0</div><div class="of">of 43 symptoms</div></div>
+        <div class="center"><div class="big" id="ringNum">0</div><div class="of" data-i18n="ringOf"></div></div>
       </div>
       <div>
-        <span class="pill">Strong symptom pattern</span>
-        <p style="margin:10px 0 0;color:var(--text-2);font-size:13.5px">65.1 % of symptoms found. The test finds signs of about 70 % in people with a confirmed diagnosis and 26 % in people without ADHD.</p>
+        <span class="pill" data-i18n="pill"></span>
+        <p style="margin:10px 0 0;color:var(--text-2);font-size:13.5px" data-i18n="ringText"></p>
       </div>
     </div>
   </header>
 
   <div class="grid g-4">
-    <div class="card stat"><div class="label">ADHD-typical answers</div><div class="value">92<small> / 169</small></div><div class="note">54.4 % of all questions</div></div>
-    <div class="card stat"><div class="label">Weighted score</div><div class="value">8.76</div><div class="note">ADHD avg 10.18 · non-ADHD avg 3.66</div></div>
-    <div class="card stat"><div class="label">DSM‑5 inattention</div><div class="value">8<small> / 9</small></div><div class="note">Adult threshold: 5</div></div>
-    <div class="card stat"><div class="label">Inconsistency</div><div class="value">20</div><div class="note">Participant avg 8.5 · higher = less certain</div></div>
+    <div class="card stat"><div class="label" data-i18n="s1l"></div><div class="value">92<small> / 169</small></div><div class="note" data-i18n="s1n"></div></div>
+    <div class="card stat"><div class="label" data-i18n="s2l"></div><div class="value" data-i18n="s2v"></div><div class="note" data-i18n="s2n"></div></div>
+    <div class="card stat"><div class="label" data-i18n="s3l"></div><div class="value">8<small> / 9</small></div><div class="note" data-i18n="s3n"></div></div>
+    <div class="card stat"><div class="label" data-i18n="s4l"></div><div class="value">20</div><div class="note" data-i18n="s4n"></div></div>
   </div>
 
   <section class="card section">
-    <h2>Where the result falls on the severity scale</h2>
-    <p class="sub">The test's own bands for the number of frequent symptoms (out of 43).</p>
+    <h2 data-i18n="bandH"></h2>
+    <p class="sub" data-i18n="bandSub"></p>
     <div class="band" id="band">
       <div class="band-track" id="bandTrack"></div>
       <div class="band-labels" id="bandLabels"></div>
@@ -186,173 +197,318 @@ footer { margin-top: 32px; color: var(--muted); font-size: 12px; text-align: cen
 
   <div class="grid g-2 section">
     <section class="card">
-      <h2>Share of symptoms found</h2>
-      <p class="sub">This result compared with the averages of past participants.</p>
-      <div class="chart-box"><canvas id="pctChart" aria-label="Bar chart: share of symptoms found"></canvas></div>
+      <h2 data-i18n="pctH"></h2>
+      <p class="sub" data-i18n="pctSub"></p>
+      <div class="chart-box"><canvas id="pctChart" data-i18n-aria="pctH"></canvas></div>
     </section>
     <section class="card">
-      <h2>Weighted score</h2>
-      <p class="sub">Symptoms weighted by how well each one separates people with ADHD from people without.</p>
-      <div class="chart-box"><canvas id="scoreChart" aria-label="Bar chart: weighted score"></canvas></div>
+      <h2 data-i18n="scoreH"></h2>
+      <p class="sub" data-i18n="scoreSub"></p>
+      <div class="chart-box"><canvas id="scoreChart" data-i18n-aria="scoreH"></canvas></div>
     </section>
   </div>
 
   <section class="card section">
-    <h2>Diagnostic criteria</h2>
-    <p class="sub">Questions matching each manual's criteria. The black line is the threshold the manual uses (adult thresholds where they differ).</p>
+    <h2 data-i18n="critH"></h2>
+    <p class="sub" data-i18n="critSub"></p>
     <div class="crit" id="crit"></div>
   </section>
 
   <section class="card section">
-    <h2>Symptoms by area</h2>
-    <p class="sub">How many symptoms were found in each area.</p>
-    <div class="legend" style="margin-bottom:10px"><span><i style="background:var(--found)"></i>Found</span><span><i style="background:var(--notfound)"></i>Not found</span></div>
-    <div class="chart-box tall"><canvas id="catChart" aria-label="Stacked bar chart of symptoms per area"></canvas></div>
+    <h2 data-i18n="catH"></h2>
+    <p class="sub" data-i18n="catSub"></p>
+    <div class="legend" style="margin-bottom:10px"><span><i style="background:var(--found)"></i><span data-i18n="found"></span></span><span><i style="background:var(--notfound)"></i><span data-i18n="notFound"></span></span></div>
+    <div class="chart-box tall"><canvas id="catChart" data-i18n-aria="catH"></canvas></div>
   </section>
 
   <section class="card section">
-    <h2>All 43 symptoms</h2>
-    <p class="sub">Solid tiles are symptoms with signs in the answers; dashed tiles had no signs.</p>
+    <h2 data-i18n="allH"></h2>
+    <p class="sub" data-i18n="allSub"></p>
     <div class="filters" id="filters">
-      <button type="button" class="active" data-f="all">All</button>
-      <button type="button" data-f="f">Found (28)</button>
-      <button type="button" data-f="n">Not found (15)</button>
+      <button type="button" class="active" data-f="all" data-i18n="fAll"></button>
+      <button type="button" data-f="f" data-i18n="fFound"></button>
+      <button type="button" data-f="n" data-i18n="fNot"></button>
     </div>
     <div class="cats" id="cats"></div>
   </section>
 
   <div class="grid g-2 section">
     <section class="card">
-      <h2>Answer consistency</h2>
-      <p class="sub">Some answers contradicted each other. The higher the value, the less reliable the result.</p>
-      <div class="chart-box" style="height:180px"><canvas id="incChart" aria-label="Bar chart: inconsistency value"></canvas></div>
+      <h2 data-i18n="incH"></h2>
+      <p class="sub" data-i18n="incSub"></p>
+      <div class="chart-box" style="height:180px"><canvas id="incChart" data-i18n-aria="incH"></canvas></div>
     </section>
     <section class="card">
-      <h2>Daily caffeine (estimate)</h2>
-      <p class="sub">From the reported amounts, using typical caffeine values. 400 mg/day is the usual upper guideline for adults.</p>
-      <div class="chart-box" style="height:180px"><canvas id="cafChart" aria-label="Stacked bar chart: daily caffeine estimate"></canvas></div>
+      <h2 data-i18n="cafH"></h2>
+      <p class="sub" data-i18n="cafSub"></p>
+      <div class="chart-box" style="height:180px"><canvas id="cafChart" data-i18n-aria="cafH"></canvas></div>
     </section>
   </div>
 
   <div class="notes section">
-    <div class="card note-card"><h3>Severe acute stress</h3><p>Acute stress was reported. Severe stress can cause the same symptoms as ADHD. Repeating the test once the stress has passed would help tell them apart.</p></div>
-    <div class="card note-card"><h3>Differential diagnosis</h3><p>Signs of <b>anhedonia</b> were found. ADxS.org offers a separate test for it.</p></div>
-    <div class="card note-card"><h3>Above-average inconsistency</h3><p>An inconsistency value of 20, against an average of 8.5, makes this result less certain.</p></div>
+    <div class="card note-card"><h3 data-i18n="n1h"></h3><p data-i18n="n1p"></p></div>
+    <div class="card note-card"><h3 data-i18n="n2h"></h3><p data-i18n="n2p"></p></div>
+    <div class="card note-card"><h3 data-i18n="n3h"></h3><p data-i18n="n3p"></p></div>
   </div>
 
   <details class="card section">
-    <summary>Show all numbers as a table</summary>
-    <table id="dataTable"><thead><tr><th>Measure</th><th class="num">Result</th><th class="num">Reference</th></tr></thead><tbody></tbody></table>
+    <summary data-i18n="tableSum"></summary>
+    <table id="dataTable"><thead><tr><th data-i18n="thM"></th><th class="num" data-i18n="thR"></th><th class="num" data-i18n="thRef"></th></tr></thead><tbody></tbody></table>
   </details>
 
-  <div class="disclaimer"><b>Please note:</b> ADxS.org's online tests are not medically validated. They are screenings that help decide whether a medical or psychological assessment could make sense. Only a qualified doctor or psychologist can diagnose ADHD.</div>
+  <div class="disclaimer" data-i18n="disc"></div>
 
-  <footer>Data source: ADxS.org Symptomtest V5 report. Visualization only, not a diagnosis.</footer>
+  <footer data-i18n="footer"></footer>
 </div>
 
 <script>
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 
-// ---- data ----
+// ---- translations ----
+const I18N = {
+  en: {
+    title: "ADHD Symptom Report",
+    eyebrow: "ADxS.org Symptomtest V5 · 06 Nov 2026",
+    h1: "Signs of <span>28 of 43</span> ADHD symptoms",
+    lede: "An interactive look at a self-screening result: how many symptoms showed up, how the answers compare with people who have and don't have ADHD, and how they map onto DSM‑5, ICD‑10 and ASRS criteria.",
+    theme: "Toggle dark / light",
+    ringAria: "28 of 43 symptoms found (65.1 %)",
+    ringOf: "of 43 symptoms",
+    pill: "Strong symptom pattern",
+    ringText: "65.1 % of symptoms found. The test finds signs of about 70 % in people with a confirmed diagnosis and 26 % in people without ADHD.",
+    s1l: "ADHD-typical answers", s1n: "54.4 % of all questions",
+    s2l: "Weighted score", s2v: "8.76", s2n: "ADHD avg 10.18 · non-ADHD avg 3.66",
+    s3l: "DSM‑5 inattention", s3n: "Adult threshold: 5",
+    s4l: "Inconsistency", s4n: "Participant avg 8.5 · higher = less certain",
+    bandH: "Where the result falls on the severity scale",
+    bandSub: "The test's own bands for the number of frequent symptoms (out of 43).",
+    bands: ["No signs", "Noticeable", "Clear", "Strong"],
+    marker: "This result: 28",
+    symptoms: "symptoms",
+    pctH: "Share of symptoms found", pctSub: "This result compared with the averages of past participants.",
+    scoreH: "Weighted score", scoreSub: "Symptoms weighted by how well each one separates people with ADHD from people without.",
+    grpNo: "Without ADHD (avg)", grpYou: "This result", grpYes: "With ADHD (avg)",
+    ofSymptoms: "of symptoms", score: "Score",
+    critH: "Diagnostic criteria",
+    critSub: "Questions matching each manual's criteria. The black line is the threshold the manual uses (adult thresholds where they differ).",
+    threshold: "threshold", met: "✓ threshold met", notMet: "threshold not met", indicative: "indicative",
+    crit: [
+      ["DSM‑5 · Inattention", "≥ 5 (age 17+) / ≥ 6 (up to 16)"],
+      ["DSM‑5 · Hyperactivity / impulsivity", "≥ 5 (age 17+) / ≥ 6 (up to 16)"],
+      ["ICD‑10 · Inattention", "≥ 6, together with ≥ 3 motor restlessness"],
+      ["ICD‑10 · Motor restlessness", "≥ 3, together with ≥ 6 inattention"],
+      ["ASRS‑V1.1 · Part A (WHO)", "≥ 4 suggests ADHD"],
+      ["ASRS‑V1.1 · Part B (WHO)", "Describes the symptom pattern; indicative only"]
+    ],
+    catH: "Symptoms by area", catSub: "How many symptoms were found in each area. Hover a bar to see which ones.",
+    found: "Found", notFound: "Not found",
+    allH: "All 43 symptoms", allSub: "Solid tiles are symptoms with signs in the answers; dashed tiles had no signs. Hover a tile for the original German name.",
+    fAll: "All", fFound: "Found (28)", fNot: "Not found (15)",
+    tileFound: "signs found", tileNot: "no signs",
+    incH: "Answer consistency", incSub: "Some answers contradicted each other. The higher the value, the less reliable the result.",
+    incAvg: "Participant average", inc: "Inconsistency",
+    cafH: "Daily caffeine (estimate)", cafSub: "From the reported amounts, using typical caffeine values. 400 mg/day is the usual upper guideline for adults.",
+    caf: ["Coffee / espresso (4 cups)", "Cola (500 ml)", "Chocolate (20 g)"], cafTotal: "≈ 380 mg / day in total", cafLabel: "Caffeine",
+    n1h: "Severe acute stress", n1p: "Acute stress was reported. Severe stress can cause the same symptoms as ADHD. Repeating the test once the stress has passed would help tell them apart.",
+    n2h: "Differential diagnosis", n2p: "Signs of <b>anhedonia</b> were found. ADxS.org offers a separate test for it.",
+    n3h: "Above-average inconsistency", n3p: "An inconsistency value of 20, against an average of 8.5, makes this result less certain.",
+    tableSum: "Show all numbers as a table", thM: "Measure", thR: "Result", thRef: "Reference",
+    rows: {
+      sf: ["Symptoms found", "28 / 43 (65.1 %)", "ADHD ≈ 70 % · non-ADHD ≈ 26 %"],
+      ta: ["ADHD-typical answers", "92 / 169 (54.4 %)", "—"],
+      ws: ["Weighted score", "8.76", "ADHD 10.18 · non-ADHD 3.66"],
+      inc: ["Inconsistency", "20", "avg 8.5"],
+      area: "Area"
+    },
+    disc: "<b>Please note:</b> ADxS.org's online tests are not medically validated. They are screenings that help decide whether a medical or psychological assessment could make sense. Only a qualified doctor or psychologist can diagnose ADHD.",
+    footer: "Data source: ADxS.org Symptomtest V5 report. Visualization only, not a diagnosis."
+  },
+  it: {
+    title: "Report sintomi ADHD",
+    eyebrow: "ADxS.org Symptomtest V5 · 6 nov 2026",
+    h1: "Segnali di <span>28 sintomi su 43</span> dell'ADHD",
+    lede: "Uno sguardo interattivo al risultato di un'autovalutazione: quanti sintomi sono emersi, come le risposte si confrontano con quelle di persone con e senza ADHD, e come corrispondono ai criteri DSM‑5, ICD‑10 e ASRS.",
+    theme: "Tema scuro / chiaro",
+    ringAria: "28 sintomi su 43 rilevati (65,1 %)",
+    ringOf: "sintomi su 43",
+    pill: "Quadro sintomatico marcato",
+    ringText: "65,1 % dei sintomi rilevati. Il test trova segnali di circa il 70 % dei sintomi nelle persone con diagnosi confermata e del 26 % in quelle senza ADHD.",
+    s1l: "Risposte tipiche dell'ADHD", s1n: "54,4 % di tutte le domande",
+    s2l: "Punteggio ponderato", s2v: "8,76", s2n: "media ADHD 10,18 · media senza ADHD 3,66",
+    s3l: "DSM‑5 disattenzione", s3n: "Soglia per adulti: 5",
+    s4l: "Incoerenza", s4n: "Media partecipanti 8,5 · più alta = meno affidabile",
+    bandH: "Dove si colloca il risultato sulla scala di intensità",
+    bandSub: "Le fasce del test per il numero di sintomi frequenti (su 43).",
+    bands: ["Nessun segnale", "Percepibile", "Evidente", "Marcato"],
+    marker: "Questo risultato: 28",
+    symptoms: "sintomi",
+    pctH: "Quota di sintomi rilevati", pctSub: "Questo risultato confrontato con le medie dei partecipanti precedenti.",
+    scoreH: "Punteggio ponderato", scoreSub: "Sintomi ponderati in base a quanto distinguono le persone con ADHD da quelle senza.",
+    grpNo: "Senza ADHD (media)", grpYou: "Questo risultato", grpYes: "Con ADHD (media)",
+    ofSymptoms: "dei sintomi", score: "Punteggio",
+    critH: "Criteri diagnostici",
+    critSub: "Domande corrispondenti ai criteri di ciascun manuale. La linea nera è la soglia usata dal manuale (soglie per adulti dove differiscono).",
+    threshold: "soglia", met: "✓ soglia raggiunta", notMet: "soglia non raggiunta", indicative: "indicativo",
+    crit: [
+      ["DSM‑5 · Disattenzione", "≥ 5 (dai 17 anni) / ≥ 6 (fino a 16 anni)"],
+      ["DSM‑5 · Iperattività / impulsività", "≥ 5 (dai 17 anni) / ≥ 6 (fino a 16 anni)"],
+      ["ICD‑10 · Disattenzione", "≥ 6, insieme a ≥ 3 di irrequietezza motoria"],
+      ["ICD‑10 · Irrequietezza motoria", "≥ 3, insieme a ≥ 6 di disattenzione"],
+      ["ASRS‑V1.1 · Parte A (OMS)", "≥ 4 indica ADHD"],
+      ["ASRS‑V1.1 · Parte B (OMS)", "Descrive il quadro sintomatico; solo indicativa"]
+    ],
+    catH: "Sintomi per area", catSub: "Quanti sintomi sono stati rilevati in ogni area. Passa sopra una barra per vedere quali.",
+    found: "Rilevato", notFound: "Non rilevato",
+    allH: "Tutti i 43 sintomi", allSub: "Le caselle piene sono sintomi con segnali nelle risposte; quelle tratteggiate non hanno segnali. Passa sopra una casella per il nome originale tedesco.",
+    fAll: "Tutti", fFound: "Rilevati (28)", fNot: "Non rilevati (15)",
+    tileFound: "segnali rilevati", tileNot: "nessun segnale",
+    incH: "Coerenza delle risposte", incSub: "Alcune risposte si contraddicevano. Più alto è il valore, meno affidabile è il risultato.",
+    incAvg: "Media partecipanti", inc: "Incoerenza",
+    cafH: "Caffeina giornaliera (stima)", cafSub: "Dalle quantità indicate, con valori tipici di caffeina. 400 mg/giorno è il limite consigliato per gli adulti.",
+    caf: ["Caffè / espresso (4 tazze)", "Cola (500 ml)", "Cioccolato (20 g)"], cafTotal: "≈ 380 mg / giorno in totale", cafLabel: "Caffeina",
+    n1h: "Forte stress acuto", n1p: "È stato indicato uno stress acuto. Uno stress forte può causare gli stessi sintomi dell'ADHD. Ripetere il test quando lo stress sarà passato aiuterebbe a distinguerli.",
+    n2h: "Diagnosi differenziale", n2p: "Sono stati rilevati segnali di <b>anedonia</b>. ADxS.org offre un test separato per questo.",
+    n3h: "Incoerenza sopra la media", n3p: "Un valore di incoerenza di 20, rispetto a una media di 8,5, rende questo risultato meno certo.",
+    tableSum: "Mostra tutti i numeri in una tabella", thM: "Misura", thR: "Risultato", thRef: "Riferimento",
+    rows: {
+      sf: ["Sintomi rilevati", "28 / 43 (65,1 %)", "ADHD ≈ 70 % · senza ADHD ≈ 26 %"],
+      ta: ["Risposte tipiche dell'ADHD", "92 / 169 (54,4 %)", "—"],
+      ws: ["Punteggio ponderato", "8,76", "ADHD 10,18 · senza ADHD 3,66"],
+      inc: ["Incoerenza", "20", "media 8,5"],
+      area: "Area"
+    },
+    disc: "<b>Nota bene:</b> i test online di ADxS.org non sono validati dal punto di vista medico. Sono screening che aiutano a capire se una valutazione medica o psicologica potrebbe essere utile. Solo un medico o uno psicologo qualificato può diagnosticare l'ADHD.",
+    footer: "Fonte dei dati: report ADxS.org Symptomtest V5. Solo visualizzazione, non una diagnosi."
+  }
+};
+
+// ---- data (de = original name from the report) ----
+const S = (de, en, it) => ({ de, en, it });
 const categories = [
-  { name: "Exekutivprobleme", en: "Executive function", found: ["Taskwechselprobleme","Entscheidungsprobleme","Organisationsprobleme","Prokrastination","Leistungsprobleme"], not: ["Lernprobleme","Zeitprobleme","Antriebslosigkeit","Denkblockaden"] },
-  { name: "Aufmerksamkeitsprobleme", en: "Attention", found: ["Konzentrationsprobleme","Ablenkbarkeit","Flüchtigkeitsfehler","Vergesslichkeit","Hyperfokus"], not: [] },
-  { name: "Emotionale Probleme", en: "Emotional", found: ["Dysphorie bei Inaktivität","Novelty Seeking","Frustrationsintoleranz","Selbstwertprobleme","Dysfunktionaler Perfektionismus"], not: ["Aggression","Rejection Sensitivity","Stimmungsschwankungen","Stressempfindlichkeit"] },
-  { name: "Innere Unruhe", en: "Inner restlessness", found: ["Erholungsunfähigkeit","Getriebenheit","Ungeduld"], not: [] },
-  { name: "Motorische Probleme", en: "Motor", found: ["Hyperaktivität (motorisch)","Grobmotorikprobleme","Feinmotorikprobleme"], not: [] },
-  { name: "Impulsivitätsprobleme", en: "Impulsivity", found: ["Handlungsimpulsivität","Wahlimpulsivität (Belohnungsaufschub)"], not: [] },
-  { name: "Suchtprobleme", en: "Addiction", found: ["Verhaltensgebundene Süchte","Koffeinkonsum"], not: ["Alkoholprobleme","Nikotin"] },
-  { name: "Soziale Probleme", en: "Social", found: ["Schulzeitprobleme (Kopfnoten)"], not: ["Kommunikationsprobleme"] },
-  { name: "Körperliche Hinweise", en: "Physical signs", found: ["Schmerzempfindlichkeit","Tagesrhythmus Eule"], not: ["Schlafprobleme","Erhöhte Sensibilität","Blutdruckprobleme"] },
-  { name: "Genetik", en: "Genetics", found: [], not: ["Genetik (Familie)"] }
+  { de: "Exekutivprobleme", en: "Executive function", it: "Funzioni esecutive",
+    found: [S("Taskwechselprobleme","Task switching","Cambiare attività"), S("Entscheidungsprobleme","Decision-making","Prendere decisioni"), S("Organisationsprobleme","Organization","Organizzazione"), S("Prokrastination","Procrastination","Procrastinazione"), S("Leistungsprobleme","Performance","Rendimento")],
+    not: [S("Lernprobleme","Learning","Apprendimento"), S("Zeitprobleme","Time management","Gestione del tempo"), S("Antriebslosigkeit","Lack of drive","Mancanza di slancio"), S("Denkblockaden","Mental blocks","Blocchi mentali")] },
+  { de: "Aufmerksamkeitsprobleme", en: "Attention", it: "Attenzione",
+    found: [S("Konzentrationsprobleme","Concentration","Concentrazione"), S("Ablenkbarkeit","Distractibility","Distraibilità"), S("Flüchtigkeitsfehler","Careless mistakes","Errori di distrazione"), S("Vergesslichkeit","Forgetfulness","Smemoratezza"), S("Hyperfokus","Hyperfocus","Iperfocalizzazione")], not: [] },
+  { de: "Emotionale Probleme", en: "Emotional", it: "Emotività",
+    found: [S("Dysphorie bei Inaktivität","Low mood when inactive","Disforia nell'inattività"), S("Novelty Seeking","Novelty seeking","Ricerca di novità"), S("Frustrationsintoleranz","Low frustration tolerance","Bassa tolleranza alla frustrazione"), S("Selbstwertprobleme","Self-esteem","Autostima"), S("Dysfunktionaler Perfektionismus","Dysfunctional perfectionism","Perfezionismo disfunzionale")],
+    not: [S("Aggression","Aggression","Aggressività"), S("Rejection Sensitivity","Rejection sensitivity","Sensibilità al rifiuto"), S("Stimmungsschwankungen","Mood swings","Sbalzi d'umore"), S("Stressempfindlichkeit","Stress sensitivity","Sensibilità allo stress")] },
+  { de: "Innere Unruhe", en: "Inner restlessness", it: "Irrequietezza interiore",
+    found: [S("Erholungsunfähigkeit","Inability to relax","Incapacità di rilassarsi"), S("Getriebenheit","Feeling driven","Spinta continua"), S("Ungeduld","Impatience","Impazienza")], not: [] },
+  { de: "Motorische Probleme", en: "Motor", it: "Motricità",
+    found: [S("Hyperaktivität (motorisch)","Motor hyperactivity","Iperattività motoria"), S("Grobmotorikprobleme","Gross motor skills","Motricità grossolana"), S("Feinmotorikprobleme","Fine motor skills","Motricità fine")], not: [] },
+  { de: "Impulsivitätsprobleme", en: "Impulsivity", it: "Impulsività",
+    found: [S("Handlungsimpulsivität","Impulsive actions","Impulsività nelle azioni"), S("Wahlimpulsivität (Belohnungsaufschub)","Delaying rewards","Rimandare la ricompensa")], not: [] },
+  { de: "Suchtprobleme", en: "Addiction", it: "Dipendenze",
+    found: [S("Verhaltensgebundene Süchte","Behavioral addictions","Dipendenze comportamentali"), S("Koffeinkonsum","Caffeine use","Consumo di caffeina")],
+    not: [S("Alkoholprobleme","Alcohol","Alcol"), S("Nikotin","Nicotine","Nicotina")] },
+  { de: "Soziale Probleme", en: "Social", it: "Ambito sociale",
+    found: [S("Schulzeitprobleme (Kopfnoten)","School conduct grades","Voti di condotta a scuola")], not: [S("Kommunikationsprobleme","Communication","Comunicazione")] },
+  { de: "Körperliche Hinweise", en: "Physical signs", it: "Segnali fisici",
+    found: [S("Schmerzempfindlichkeit","Pain sensitivity","Sensibilità al dolore"), S("Tagesrhythmus Eule","Night-owl rhythm","Ritmo nottambulo")],
+    not: [S("Schlafprobleme","Sleep","Sonno"), S("Erhöhte Sensibilität","Heightened sensitivity","Sensibilità elevata"), S("Blutdruckprobleme","Blood pressure","Pressione sanguigna")] },
+  { de: "Genetik", en: "Genetics", it: "Genetica", found: [], not: [S("Genetik (Familie)","Family history","Familiarità")] }
 ];
 const criteria = [
-  { label: "DSM‑5 · Inattention", v: 8, max: 9, thr: 5, rule: "≥ 5 (age 17+) / ≥ 6 (up to 16)" },
-  { label: "DSM‑5 · Hyperactivity / impulsivity", v: 8, max: 10, thr: 5, rule: "≥ 5 (age 17+) / ≥ 6 (up to 16)" },
-  { label: "ICD‑10 · Inattention", v: 7, max: 9, thr: 6, rule: "≥ 6, together with ≥ 3 motor restlessness" },
-  { label: "ICD‑10 · Motor restlessness", v: 3, max: 5, thr: 3, rule: "≥ 3, together with ≥ 6 inattention" },
-  { label: "ASRS‑V1.1 · Part A (WHO)", v: 5, max: 6, thr: 4, rule: "≥ 4 suggests ADHD" },
-  { label: "ASRS‑V1.1 · Part B (WHO)", v: 11, max: 12, thr: null, rule: "Describes the symptom pattern; indicative only" }
+  { v: 8, max: 9, thr: 5 }, { v: 8, max: 10, thr: 5 }, { v: 7, max: 9, thr: 6 },
+  { v: 3, max: 5, thr: 3 }, { v: 5, max: 6, thr: 4 }, { v: 11, max: 12, thr: null }
 ];
+
+// ---- language state ----
+let lang = 'en';
+try { const q = new URLSearchParams(location.search).get('lang'); const s = localStorage.getItem('lang'); lang = (q || s || (navigator.language || '').slice(0, 2)) === 'it' ? 'it' : 'en'; } catch (e) {}
+const T = () => I18N[lang];
+const num = (v, d = 0) => v.toLocaleString(lang === 'it' ? 'it-IT' : 'en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+function applyStatic() {
+  const t = T();
+  document.documentElement.lang = lang;
+  document.title = t.title;
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.innerHTML = t[el.dataset.i18n]; });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', t[el.dataset.i18nAria]));
+  document.querySelectorAll('.lang-switch button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+}
 
 // ---- ring ----
 function animateRing() {
-  const arc = document.getElementById('ringArc'), num = document.getElementById('ringNum');
-  const C = 2 * Math.PI * 42, target = 28 / 43;
-  const t0 = performance.now(), dur = 1200;
+  const arc = document.getElementById('ringArc'), n = document.getElementById('ringNum');
+  const C = 2 * Math.PI * 42, target = 28 / 43, t0 = performance.now(), dur = 1200;
   (function step(t) {
     const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
     arc.setAttribute('stroke-dasharray', `${C * target * e} ${C}`);
-    num.textContent = Math.round(28 * e);
+    n.textContent = Math.round(28 * e);
     if (p < 1) requestAnimationFrame(step);
   })(t0);
 }
 
 // ---- severity band ----
 function buildBand() {
+  const t = T();
   const bands = [
-    { from: 0, to: 11, label: "No signs", r: "0–11", c: "--band-1" },
-    { from: 12, to: 17, label: "Noticeable", r: "12–17", c: "--band-2" },
-    { from: 18, to: 25, label: "Clear", r: "18–25", c: "--band-3" },
-    { from: 26, to: 43, label: "Strong", r: "26+", c: "--band-4" }
+    { from: 0, to: 11, r: "0–11", c: "--band-1" }, { from: 12, to: 17, r: "12–17", c: "--band-2" },
+    { from: 18, to: 25, r: "18–25", c: "--band-3" }, { from: 26, to: 43, r: "26+", c: "--band-4" }
   ];
-  const track = document.getElementById('bandTrack'), labels = document.getElementById('bandLabels');
-  bands.forEach(b => {
+  const band = document.getElementById('band'), track = document.getElementById('bandTrack'), labels = document.getElementById('bandLabels');
+  track.innerHTML = ''; labels.innerHTML = ''; band.querySelectorAll('.marker').forEach(m => m.remove());
+  bands.forEach((b, i) => {
     const w = (b.to - b.from + 1) / 44 * 100;
     const d = document.createElement('div'); d.style.flex = `0 0 calc(${w}% - 2px)`; d.style.background = `var(${b.c})`;
-    d.title = `${b.label}: ${b.r} symptoms`; track.appendChild(d);
-    const l = document.createElement('div'); l.style.flex = `0 0 calc(${w}% - 2px)`; l.innerHTML = `<b>${b.label}</b>${b.r}`; labels.appendChild(l);
+    d.title = `${t.bands[i]}: ${b.r} ${t.symptoms}`; track.appendChild(d);
+    const l = document.createElement('div'); l.style.flex = `0 0 calc(${w}% - 2px)`; l.innerHTML = `<b>${t.bands[i]}</b>${b.r}`; labels.appendChild(l);
   });
-  const band = document.getElementById('band');
-  const pos = v => `${(v + 0.5) / 44 * 100}%`;
-  const m = document.createElement('div'); m.className = 'marker'; m.style.left = pos(28); m.textContent = 'This result: 28'; band.appendChild(m);
+  const m = document.createElement('div'); m.className = 'marker'; m.style.left = `${28.5 / 44 * 100}%`; m.textContent = t.marker; band.appendChild(m);
 }
 
 // ---- criteria ----
+let critBuilt = false;
 function buildCriteria() {
-  const root = document.getElementById('crit');
-  criteria.forEach(c => {
+  const t = T(), root = document.getElementById('crit');
+  root.innerHTML = '';
+  criteria.forEach((c, i) => {
     const met = c.thr == null ? null : c.v >= c.thr;
     const row = document.createElement('div'); row.className = 'crit-row';
     row.innerHTML = `
-      <div class="top"><span>${c.label}</span><b>${c.v} / ${c.max}</b></div>
-      <div class="crit-track"><div class="crit-fill" data-w="${c.v / c.max * 100}"></div>
-        ${c.thr != null ? `<div class="crit-thr" style="left:${c.thr / c.max * 100}%"><span>threshold ${c.thr}</span></div>` : ''}
+      <div class="top"><span>${t.crit[i][0]}</span><b>${c.v} / ${c.max}</b></div>
+      <div class="crit-track"><div class="crit-fill" data-w="${c.v / c.max * 100}" style="${critBuilt ? `width:${c.v / c.max * 100}%;transition:none` : ''}"></div>
+        ${c.thr != null ? `<div class="crit-thr" style="left:${c.thr / c.max * 100}%"><span>${t.threshold} ${c.thr}</span></div>` : ''}
       </div>
-      <div class="meta">${c.rule}${met != null ? ` · <span class="ok">${met ? '✓ threshold met' : 'threshold not met'}</span>` : ''}</div>`;
+      <div class="meta">${t.crit[i][1]}${met != null ? ` · <span class="ok">${met ? t.met : t.notMet}</span>` : ''}</div>`;
     root.appendChild(row);
   });
-  requestAnimationFrame(() => setTimeout(() => root.querySelectorAll('.crit-fill').forEach(f => f.style.width = f.dataset.w + '%'), 120));
+  if (!critBuilt) requestAnimationFrame(() => setTimeout(() => root.querySelectorAll('.crit-fill').forEach(f => f.style.width = f.dataset.w + '%'), 120));
+  critBuilt = true;
 }
 
 // ---- tiles ----
+let filter = 'all';
 function buildTiles() {
-  const root = document.getElementById('cats');
+  const t = T(), root = document.getElementById('cats');
+  root.innerHTML = '';
   categories.forEach(cat => {
     const row = document.createElement('div'); row.className = 'cat-row';
-    const tiles = cat.found.map(s => `<span class="tile f" data-k="f" title="${s}: signs found">${s}</span>`)
-      .concat(cat.not.map(s => `<span class="tile n" data-k="n" title="${s}: no signs">${s}</span>`)).join('');
-    row.innerHTML = `<div class="cat-name">${cat.name}<small>${cat.en} · ${cat.found.length}/${cat.found.length + cat.not.length}</small></div><div class="tiles">${tiles}</div>`;
+    const tile = (s, k) => `<span class="tile ${k}${filter !== 'all' && filter !== k ? ' dim' : ''}" data-k="${k}" title="${s.de} · ${k === 'f' ? t.tileFound : t.tileNot}">${s[lang]}</span>`;
+    const tiles = cat.found.map(s => tile(s, 'f')).concat(cat.not.map(s => tile(s, 'n'))).join('');
+    row.innerHTML = `<div class="cat-name">${cat[lang]}<small>${cat.de} · ${cat.found.length}/${cat.found.length + cat.not.length}</small></div><div class="tiles">${tiles}</div>`;
     root.appendChild(row);
   });
-  document.getElementById('filters').addEventListener('click', e => {
-    const b = e.target.closest('button'); if (!b) return;
-    document.querySelectorAll('#filters button').forEach(x => x.classList.toggle('active', x === b));
-    document.querySelectorAll('.tile').forEach(t => t.classList.toggle('dim', b.dataset.f !== 'all' && t.dataset.k !== b.dataset.f));
-  });
 }
+document.getElementById('filters').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  filter = b.dataset.f;
+  document.querySelectorAll('#filters button').forEach(x => x.classList.toggle('active', x === b));
+  document.querySelectorAll('.tile').forEach(x => x.classList.toggle('dim', filter !== 'all' && x.dataset.k !== filter));
+});
 
 // ---- table ----
 function buildTable() {
+  const t = T(), r = t.rows;
   const rows = [
-    ["Symptoms found", "28 / 43 (65.1 %)", "ADHD ≈ 70 % · non-ADHD ≈ 26 %"],
-    ["ADHD-typical answers", "92 / 169 (54.4 %)", "—"],
-    ["Weighted score", "8.76", "ADHD 10.18 · non-ADHD 3.66"],
-    ...criteria.map(c => [c.label, `${c.v} / ${c.max}`, c.thr != null ? `threshold ${c.thr}` : 'indicative']),
-    ["Inconsistency", "20", "avg 8.5"],
-    ...categories.map(c => [`Area: ${c.name}`, `${c.found.length} / ${c.found.length + c.not.length}`, "—"])
+    r.sf, r.ta, r.ws,
+    ...criteria.map((c, i) => [t.crit[i][0], `${c.v} / ${c.max}`, c.thr != null ? `${t.threshold} ${c.thr}` : t.indicative]),
+    r.inc,
+    ...categories.map(c => [`${r.area}: ${c[lang]}`, `${c.found.length} / ${c.found.length + c.not.length}`, "—"])
   ];
-  document.querySelector('#dataTable tbody').innerHTML = rows.map(r => `<tr><td>${r[0]}</td><td class="num">${r[1]}</td><td class="num">${r[2]}</td></tr>`).join('');
+  document.querySelector('#dataTable tbody').innerHTML = rows.map(x => `<tr><td>${x[0]}</td><td class="num">${x[1]}</td><td class="num">${x[2]}</td></tr>`).join('');
 }
 
 // ---- charts ----
@@ -360,7 +516,7 @@ let charts = [];
 function baseOpts(extra = {}) {
   const grid = css('--grid'), text = css('--text-2');
   return Object.assign({
-    responsive: true, maintainAspectRatio: false,
+    responsive: true, maintainAspectRatio: false, locale: lang === 'it' ? 'it-IT' : 'en-US',
     animation: { duration: 900, easing: 'easeOutCubic' },
     plugins: {
       legend: { display: false },
@@ -372,7 +528,6 @@ function baseOpts(extra = {}) {
     }
   }, extra);
 }
-// draws value labels above/at the end of bars
 const valueLabels = {
   id: 'valueLabels',
   afterDatasetsDraw(chart, _a, opts) {
@@ -380,7 +535,6 @@ const valueLabels = {
     const { ctx } = chart; ctx.save();
     ctx.font = '600 12px Inter, sans-serif'; ctx.fillStyle = css('--text');
     chart.data.datasets.forEach((ds, i) => {
-      if (opts.only != null && opts.only !== i) return;
       chart.getDatasetMeta(i).data.forEach((bar, j) => {
         const v = ds.data[j]; if (!v) return;
         const txt = opts.fmt ? opts.fmt(v) : v;
@@ -392,79 +546,71 @@ const valueLabels = {
   }
 };
 
-function buildCharts() {
+function buildCharts(animate = true) {
   charts.forEach(c => c.destroy()); charts = [];
+  const t = T();
   const found = css('--found'), ref = css('--ref'), nf = css('--notfound'), accent = css('--accent'), surface = css('--surface');
   const barStyle = { borderRadius: 4, borderSkipped: 'start', maxBarThickness: 64 };
+  const B = baseOpts(); const tip = B.plugins.tooltip;
+  const anim = animate ? B.animation : false;
+  const groups = [t.grpNo, t.grpYou, t.grpYes];
 
   charts.push(new Chart(document.getElementById('pctChart'), {
     type: 'bar', plugins: [valueLabels],
-    data: { labels: ['Without ADHD (avg)', 'This result', 'With ADHD (avg)'],
-      datasets: [{ data: [26, 65.1, 70], backgroundColor: [ref, found, ref], ...barStyle }] },
-    options: baseOpts({
-      plugins: { ...baseOpts().plugins, valueLabels: { enabled: true, fmt: v => v + ' %' },
-        tooltip: { ...baseOpts().plugins.tooltip, callbacks: { label: c => `${c.parsed.y} % of symptoms` } } },
-      scales: { ...baseOpts().scales, y: { ...baseOpts().scales.y, min: 0, max: 100, ticks: { ...baseOpts().scales.y.ticks, callback: v => v + ' %' } } },
-      layout: { padding: { top: 20 } }
-    })
+    data: { labels: groups, datasets: [{ data: [26, 65.1, 70], backgroundColor: [ref, found, ref], ...barStyle }] },
+    options: baseOpts({ animation: anim,
+      plugins: { ...B.plugins, valueLabels: { enabled: true, fmt: v => num(v, v % 1 ? 1 : 0) + ' %' },
+        tooltip: { ...tip, callbacks: { label: c => `${num(c.parsed.y, c.parsed.y % 1 ? 1 : 0)} % ${t.ofSymptoms}` } } },
+      scales: { ...B.scales, y: { ...B.scales.y, min: 0, max: 100, ticks: { ...B.scales.y.ticks, callback: v => v + ' %' } } },
+      layout: { padding: { top: 20 } } })
   }));
 
   charts.push(new Chart(document.getElementById('scoreChart'), {
     type: 'bar', plugins: [valueLabels],
-    data: { labels: ['Without ADHD (avg)', 'This result', 'With ADHD (avg)'],
-      datasets: [{ data: [3.66, 8.76, 10.18], backgroundColor: [ref, found, ref], ...barStyle }] },
-    options: baseOpts({
-      plugins: { ...baseOpts().plugins, valueLabels: { enabled: true, fmt: v => v.toFixed(2) },
-        tooltip: { ...baseOpts().plugins.tooltip, callbacks: { label: c => `Score ${c.parsed.y.toFixed(2)}` } } },
-      scales: { ...baseOpts().scales, y: { ...baseOpts().scales.y, min: 0, max: 12 } },
-      layout: { padding: { top: 20 } }
-    })
+    data: { labels: groups, datasets: [{ data: [3.66, 8.76, 10.18], backgroundColor: [ref, found, ref], ...barStyle }] },
+    options: baseOpts({ animation: anim,
+      plugins: { ...B.plugins, valueLabels: { enabled: true, fmt: v => num(v, 2) },
+        tooltip: { ...tip, callbacks: { label: c => `${t.score} ${num(c.parsed.y, 2)}` } } },
+      scales: { ...B.scales, y: { ...B.scales.y, min: 0, max: 12 } },
+      layout: { padding: { top: 20 } } })
   }));
 
-  const catLabels = categories.map(c => c.en);
   charts.push(new Chart(document.getElementById('catChart'), {
     type: 'bar',
-    data: { labels: catLabels, datasets: [
-      { label: 'Found', data: categories.map(c => c.found.length), backgroundColor: found, borderColor: surface, borderWidth: { right: 2 }, borderRadius: 4, borderSkipped: false, barThickness: 20 },
-      { label: 'Not found', data: categories.map(c => c.not.length), backgroundColor: nf, borderColor: surface, borderWidth: { left: 2 }, borderRadius: 4, borderSkipped: false, barThickness: 20 }
+    data: { labels: categories.map(c => c[lang]), datasets: [
+      { label: t.found, data: categories.map(c => c.found.length), backgroundColor: found, borderColor: surface, borderWidth: { right: 2 }, borderRadius: 4, borderSkipped: false, barThickness: 20 },
+      { label: t.notFound, data: categories.map(c => c.not.length), backgroundColor: nf, borderColor: surface, borderWidth: { left: 2 }, borderRadius: 4, borderSkipped: false, barThickness: 20 }
     ] },
-    options: baseOpts({
-      indexAxis: 'y',
-      plugins: { ...baseOpts().plugins, tooltip: { ...baseOpts().plugins.tooltip, displayColors: true,
-        callbacks: { title: i => categories[i[0].dataIndex].name + ' · ' + categories[i[0].dataIndex].en,
-          label: c => { const cat = categories[c.dataIndex]; const list = c.datasetIndex === 0 ? cat.found : cat.not; return `${c.dataset.label}: ${c.parsed.x}` + (list.length ? ' (' + list.join(', ') + ')' : ''); } } } },
+    options: baseOpts({ animation: anim, indexAxis: 'y',
+      plugins: { ...B.plugins, tooltip: { ...tip, displayColors: true,
+        callbacks: { title: i => categories[i[0].dataIndex][lang],
+          label: c => { const cat = categories[c.dataIndex]; const list = c.datasetIndex === 0 ? cat.found : cat.not; return `${c.dataset.label}: ${c.parsed.x}` + (list.length ? ' (' + list.map(s => s[lang]).join(', ') + ')' : ''); } } } },
       scales: {
         x: { stacked: true, grid: { color: css('--grid') }, border: { display: false }, ticks: { color: css('--text-2'), stepSize: 1 }, max: 9 },
         y: { stacked: true, grid: { display: false }, border: { color: css('--grid') }, ticks: { color: css('--text'), font: { family: 'Inter', size: 12.5 } } }
-      }
-    })
+      } })
   }));
 
   charts.push(new Chart(document.getElementById('incChart'), {
     type: 'bar', plugins: [valueLabels],
-    data: { labels: ['Participant average', 'This result'], datasets: [{ data: [8.5, 20], backgroundColor: [ref, accent], borderRadius: 4, borderSkipped: 'start', barThickness: 26 }] },
-    options: baseOpts({
-      indexAxis: 'y',
-      plugins: { ...baseOpts().plugins, valueLabels: { enabled: true }, tooltip: { ...baseOpts().plugins.tooltip, callbacks: { label: c => `Inconsistency ${c.parsed.x}` } } },
+    data: { labels: [t.incAvg, t.grpYou], datasets: [{ data: [8.5, 20], backgroundColor: [ref, accent], borderRadius: 4, borderSkipped: 'start', barThickness: 26 }] },
+    options: baseOpts({ animation: anim, indexAxis: 'y',
+      plugins: { ...B.plugins, valueLabels: { enabled: true, fmt: v => num(v, v % 1 ? 1 : 0) }, tooltip: { ...tip, callbacks: { label: c => `${t.inc} ${num(c.parsed.x, c.parsed.x % 1 ? 1 : 0)}` } } },
       scales: { x: { min: 0, max: 25, grid: { color: css('--grid') }, border: { display: false }, ticks: { color: css('--text-2') } },
-                y: { grid: { display: false }, border: { color: css('--grid') }, ticks: { color: css('--text') } } }
-    })
+                y: { grid: { display: false }, border: { color: css('--grid') }, ticks: { color: css('--text') } } } })
   }));
 
   // caffeine: coffee ~80 mg/cup, cola ~10 mg/100 ml, chocolate ~0.5 mg/g (estimates)
-  const caf = [{ l: 'Coffee / espresso (4 cups)', v: 320 }, { l: 'Cola (500 ml)', v: 50 }, { l: 'Chocolate (20 g)', v: 10 }];
-  const cafColors = [found, css('--band-2'), css('--band-1')];
+  const cafV = [320, 50, 10], cafColors = [found, css('--band-2'), css('--band-1')];
   charts.push(new Chart(document.getElementById('cafChart'), {
     type: 'bar',
-    data: { labels: ['Caffeine'], datasets: caf.map((c, i) => ({ label: c.l, data: [c.v], backgroundColor: cafColors[i], borderColor: surface, borderWidth: { right: 2 }, borderSkipped: false, borderRadius: i === caf.length - 1 ? 4 : 0, barThickness: 30 })) },
-    options: baseOpts({
-      indexAxis: 'y',
-      plugins: { ...baseOpts().plugins,
+    data: { labels: [t.cafLabel], datasets: cafV.map((v, i) => ({ label: t.caf[i], data: [v], backgroundColor: cafColors[i], borderColor: surface, borderWidth: { right: 2 }, borderSkipped: false, borderRadius: i === cafV.length - 1 ? 4 : 0, barThickness: 30 })) },
+    options: baseOpts({ animation: anim, indexAxis: 'y',
+      plugins: { ...B.plugins,
         legend: { display: true, position: 'bottom', labels: { color: css('--text-2'), boxWidth: 12, boxHeight: 12, font: { family: 'Inter', size: 12 } } },
-        tooltip: { ...baseOpts().plugins.tooltip, displayColors: true, callbacks: { title: () => '≈ 380 mg / day in total', label: c => `${c.dataset.label}: ≈ ${c.parsed.x} mg` } } },
+        tooltip: { ...tip, displayColors: true, callbacks: { title: () => t.cafTotal, label: c => `${c.dataset.label}: ≈ ${c.parsed.x} mg` } } },
       scales: { x: { stacked: true, min: 0, max: 450, grid: { color: css('--grid') }, border: { display: false }, ticks: { color: css('--text-2'), maxTicksLimit: 6, maxRotation: 0, callback: v => v + ' mg' } },
-                y: { stacked: true, display: false } }
-    }),
+                y: { stacked: true, display: false } } }),
     plugins: [{ id: 'limit', afterDatasetsDraw(ch) {
       const x = ch.scales.x.getPixelForValue(400), { top, bottom } = ch.chartArea, ctx = ch.ctx;
       ctx.save(); ctx.strokeStyle = css('--text'); ctx.lineWidth = 2; ctx.setLineDash([4, 3]);
@@ -475,19 +621,34 @@ function buildCharts() {
   }));
 }
 
+function render(animate) {
+  applyStatic(); buildBand(); buildCriteria(); buildTiles(); buildTable();
+  if (window.Chart) buildCharts(animate);
+}
+
+// ---- language switch ----
+document.querySelector('.lang-switch').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || b.dataset.lang === lang) return;
+  lang = b.dataset.lang;
+  try { localStorage.setItem('lang', lang); } catch (err) {}
+  try { const u = new URL(location.href); u.searchParams.set('lang', lang); history.replaceState(null, '', u); } catch (err) {}
+  render(false);
+});
+
 // ---- theme ----
 document.getElementById('themeBtn').addEventListener('click', () => {
   const root = document.documentElement;
   const isDark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
   root.dataset.theme = isDark ? 'light' : 'dark';
   try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
-  buildCharts();
+  if (window.Chart) buildCharts(false);
 });
-try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
-matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (!document.documentElement.dataset.theme) buildCharts(); });
+try { const th = localStorage.getItem('theme'); if (th) document.documentElement.dataset.theme = th; } catch (e) {}
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (!document.documentElement.dataset.theme && window.Chart) buildCharts(false); });
 
-animateRing(); buildBand(); buildCriteria(); buildTiles(); buildTable();
-if (window.Chart) { Chart.defaults.font.family = 'Inter, system-ui, sans-serif'; buildCharts(); }
+if (window.Chart) Chart.defaults.font.family = 'Inter, system-ui, sans-serif';
+render(true);
+animateRing();
 </script>
 </body>
 </html>
